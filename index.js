@@ -5,7 +5,7 @@ const run = async () => {
   // Wrap an asynchronous function call
   const result = await core.group("Do something async", async () => {
     try {
-      const githubToken = core.getInput("CI_REPORTER_GITHUB_TOKEN");
+      const githubToken = core.getInput("repo-token");
 
       const octokit = github.getOctokit(githubToken);
 
