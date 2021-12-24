@@ -10,6 +10,12 @@ try {
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)
   console.log(`The event payload: ${payload}`);
+
+  const response = await octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
+    owner_repo: GITHUB_REPOSITORY,
+    run_id: GITHUB_RUN_ID,
+  })
+  console.log(`The event payload: ${response}`);
 } catch (error) {
   core.setFailed(error.message);
 }
