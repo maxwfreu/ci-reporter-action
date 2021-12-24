@@ -18,14 +18,22 @@ const run = async () => {
       //   const payload = JSON.stringify(github.context.payload, undefined, 2);
       //   console.log(`The event payload: ${payload}`);
 
-      const response = await octokit.request(
-        "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
-        {
-          owner_repo: process.env.GITHUB_REPOSITORY,
-          run_id: process.env.GITHUB_RUN_ID,
-        }
-      );
-      return response;
+      //   const response = await octokit.request(
+      //     "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
+      //     {
+      //       owner_repo: process.env.GITHUB_REPOSITORY,
+      //       run_id: process.env.GITHUB_RUN_ID,
+      //     }
+      //   );
+      console.log(process.env.GITHUB_REPOSITORY);
+      console.log(process.env.GITHUB_RUN_ID);
+
+      const { data } = await octokit.rest.actions.listJobsForWorkflowRun({
+        owner: process.env.GITHUB_REPOSITORY.split("/")[0],
+        repo: process.env.GITHUB_REPOSITORY.split("/")[1],
+        run_id: process.env.GITHUB_RUN_ID,
+      });
+      return data;
     } catch (error) {
       core.setFailed(error.message);
     }
