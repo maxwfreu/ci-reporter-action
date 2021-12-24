@@ -5,16 +5,20 @@ const run = async () => {
   // Wrap an asynchronous function call
   const result = await core.group("Do something async", async () => {
     try {
-      // `who-to-greet` input defined in action metadata file
-      const nameToGreet = core.getInput("who-to-greet");
-      console.log(`Hello ${nameToGreet}!`);
-      const time = new Date().toTimeString();
-      core.setOutput("time", time);
-      // Get the JSON webhook payload for the event that triggered the workflow
-      const payload = JSON.stringify(github.context.payload, undefined, 2);
-      console.log(`The event payload: ${payload}`);
+      const githubToken = core.getInput("CI_REPORTER_GITHUB_TOKEN");
 
-      const response = await github.request(
+      const octokit = github.getOctokit(githubToken);
+
+      //   // `who-to-greet` input defined in action metadata file
+      //   const nameToGreet = core.getInput("who-to-greet");
+      //   console.log(`Hello ${nameToGreet}!`);
+      //   const time = new Date().toTimeString();
+      //   core.setOutput("time", time);
+      //   // Get the JSON webhook payload for the event that triggered the workflow
+      //   const payload = JSON.stringify(github.context.payload, undefined, 2);
+      //   console.log(`The event payload: ${payload}`);
+
+      const response = await octokit.request(
         "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
         {
           owner_repo: process.env.GITHUB_REPOSITORY,
