@@ -14,7 +14,7 @@ const run = async () => {
       const payload = JSON.stringify(github.context.payload, undefined, 2);
       console.log(`The event payload: ${payload}`);
 
-      const response = await octokit.request(
+      const response = await github.request(
         "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
         {
           owner_repo: GITHUB_REPOSITORY,
