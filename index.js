@@ -17,8 +17,8 @@ const run = async () => {
       const response = await github.request(
         "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
         {
-          owner_repo: $GITHUB_REPOSITORY,
-          run_id: $GITHUB_RUN_ID,
+          owner_repo: process.env.GITHUB_REPOSITORY,
+          run_id: process.env.GITHUB_RUN_ID,
         }
       );
       return response;
