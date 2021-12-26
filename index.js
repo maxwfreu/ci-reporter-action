@@ -16,11 +16,10 @@ const run = async () => {
         repo: process.env.GITHUB_REPOSITORY.split("/")[1],
         run_id: process.env.GITHUB_RUN_ID,
       });
-
       const resp = await fetch("https://cireporter.com/api/ci/save", {
         method: "POST",
         headers: {
-          "ci-reporter-token": ciReporterToken,
+          "x-cireporter-api-key": ciReporterToken,
         },
         body: JSON.stringify({
           project_id: ciReporterProject,
