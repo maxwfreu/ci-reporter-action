@@ -4,6 +4,12 @@ inputs:
   repo-token:
     description: "Should be set to the GITHUB_TOKEN environment variable"
     required: true
+  ci-reporter-token:
+    description: "Your CI Reporter API Token"
+    required: true
+  ci-reporter-project-id:
+    description: "The project ID to associate job data with"
+    required: true
 runs:
   using: "node12"
   main: "index.js"

@@ -6,34 +6,29 @@ const run = async () => {
   const result = await core.group("Do something async", async () => {
     try {
       const githubToken = core.getInput("repo-token");
+      const ciReporterToken = core.getInput("ci-reporter-token");
+      const ciReporterProject = core.getInput("ci-reporter-project-id");
 
       const octokit = github.getOctokit(githubToken);
-
-      //   // `who-to-greet` input defined in action metadata file
-      //   const nameToGreet = core.getInput("who-to-greet");
-      //   console.log(`Hello ${nameToGreet}!`);
-      //   const time = new Date().toTimeString();
-      //   core.setOutput("time", time);
-      //   // Get the JSON webhook payload for the event that triggered the workflow
-      //   const payload = JSON.stringify(github.context.payload, undefined, 2);
-      //   console.log(`The event payload: ${payload}`);
-
-      //   const response = await octokit.request(
-      //     "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
-      //     {
-      //       owner_repo: process.env.GITHUB_REPOSITORY,
-      //       run_id: process.env.GITHUB_RUN_ID,
-      //     }
-      //   );
-      console.log(process.env.GITHUB_REPOSITORY);
-      console.log(process.env.GITHUB_RUN_ID);
-
       const { data } = await octokit.rest.actions.listJobsForWorkflowRun({
         owner: process.env.GITHUB_REPOSITORY.split("/")[0],
         repo: process.env.GITHUB_REPOSITORY.split("/")[1],
         run_id: process.env.GITHUB_RUN_ID,
       });
-      return data;
+
+      const resp = await fetch("https://ci-reporter.com/api/ci/save", {
+        method: "POST",
+        headers: {
+          "ci-reporter-token": ciReporterToken,
+        },
+        body: JSON.stringify({
+          project_id: ciReporterProject,
+          ci_name: "github",
+          data,
+        }),
+      });
+      const json = await resp.json();
+      return json;
     } catch (error) {
       core.setFailed(error.message);
     }
