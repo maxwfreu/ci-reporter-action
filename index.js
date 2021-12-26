@@ -17,7 +17,7 @@ const run = async () => {
         run_id: process.env.GITHUB_RUN_ID,
       });
 
-      const resp = await fetch("https://ci-reporter.com/api/ci/save", {
+      const resp = await fetch("https://cireporter.com/api/ci/save", {
         method: "POST",
         headers: {
           "ci-reporter-token": ciReporterToken,
