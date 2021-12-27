@@ -24,10 +24,20 @@ const run = async () => {
         body: JSON.stringify({
           project_id: ciReporterProject,
           ci_name: "github",
+          workflow_id: process.env.GITHUB_ACTION,
           data,
         }),
       });
       const json = await resp.json();
+      console.log(github.context.issue.number);
+      if (github.context.issue.number) {
+        await octokit.rest.issues.createComment({
+          owner: process.env.GITHUB_REPOSITORY.split("/")[0],
+          repo: process.env.GITHUB_REPOSITORY.split("/")[1],
+          issue_number: github.context.issue.number,
+          body: "body",
+        });
+      }
       return json;
     } catch (error) {
       core.setFailed(error.message);
