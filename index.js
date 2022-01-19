@@ -3,6 +3,8 @@ const github = require("@actions/github");
 const fetch = require("node-fetch");
 
 const run = async () => {
+  console.log("workflow name");
+  console.log(process.env.GITHUB_WORKFLOW);
   // Wrap an asynchronous function call
   const result = await core.group("Do something async", async () => {
     try {
